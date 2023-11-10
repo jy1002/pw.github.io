@@ -1,20 +1,67 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Get Text Example</title>
-</head>
-<body>
-    <input type="text" id="textInput" placeholder="Enter text">
-    <button onclick="getText()">Get Text</button>
+  <head>
+    <!-- <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" /> -->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  </head>
+  <body>
+    <py-env>
+        - cryptography
+        - paths:
+            - ./log.json
+    </py-env>
+    <h1 id="pi" class="alert alert-primary"></h1>
+    <h1 id="pi2" class="alert alert-primary"></h1>
+    <py-config id ="jsondata" type="json" src="./log.json"></py-config>
+    <py-script>
+        from cryptography.fernet import Fernet
+        import json
+        import os
 
-    <script>
-        function getText() {
-            // Get the text from the input field
-            var text = document.getElementById("textInput").value;
+        pyscript.write('pi2', os.listdir('./'))
 
-            // Print the text to the browser console
-            console.log("get text: " + text);
-        }
-    </script>
-</body>
+        input_text = Element("input_text")
+        output_text = Element("output_text")
+        dict = Element("dict")
+        try:
+            with open('./log.json', 'r') as f:
+                data = json.load(f)
+        except:
+            data = jsondata
+        <!-- 현재 저장하고 있는 id 목록들을 보여줌 -->
+        for key in data.keys():
+            print(key)
+        pyscript.write('pi', "여기까지 무사히 옴3")
+        <!-- print(data.item()) -->
+        def function_add_text(*args):
+                <!-- # key, naver, encrypt_text (optional) -->
+            commands = input_text.value.split('/')
+            key = str.encode(commands[0]) + b'uj6xotMc8XTmN8rwDvqK8zoBu6aAQOsHEuM='
+                <!-- print('here1') -->
+                <!-- fernet = Fernet(key) -->
+                <!-- if len(commands) == 2:
+                    print(fernet.decrypt())
+                elif len(commands) == 3:
+                    data[commands[1]] = fernet.encrypt(optional[2]) -->
+            data[commands[0]] = commands[1]
+
+            pyscript.write('pi2', "여기까지 무사히 옴2")
+            with open('./log.json', 'w') as f:
+                json.dump(data, f)
+                pyscript.write('pi', data)
+
+            pyscript.write('pi2', os.listdir('./'))
+
+            output_text.element.innerText = '_'.join(commands)
+            input_text.clear()
+        
+            </py-script>
+            <main class = "container">
+                <h1 id = "dict"></h1>
+                <h1 id = "output_text"></h1>
+                <div>
+                  <input id = "input_text" type="text" placeholder="댜니, 뿌꾸, (ㅁㅁㅁ) / key">
+                  <button id = "add_text" pys-onClick ="function_add_text">Click</button>
+                </div> 
+            </main>   
+  </body>
 </html>
